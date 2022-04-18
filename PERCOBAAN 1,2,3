@@ -1,0 +1,246 @@
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct simpul Node;
+struct simpul
+{
+	int nilai;
+	Node *next;
+};
+Node *head, *p;
+
+void sisip_awal();
+void sisip_setelah();
+void sisip_sebelum();
+void hapus_awal();
+void hapus_tertentu();
+void bebas();
+void tampil();
+void menu_sisip();
+void menu_hapus();
+
+main()
+{
+	int input;
+	puts("Aldi Firdaus || 2107111256");
+	puts("S1 Teknik Informatika");
+	puts("===================================");
+	do
+	{
+		puts("Pilihan");
+		puts("1.Sisip \n2.Hapus \n3.exit");
+		printf("Pilih satu : ");
+		scanf("%d", &input);
+		fflush(stdin);
+		switch (input)
+		{
+			case 1:
+			menu_sisip();
+			break;
+			case 2:
+			menu_hapus();
+			break;
+			case 3:
+			main();
+		}
+	} while (1);
+}
+void menu_hapus()
+{
+	int plh;
+	puts("1.hapus Awal \n2.Hapus Tertentu \n3.exit");
+	printf("Masukan Pilihan : ");
+	scanf("%d", &plh);
+	fflush(stdin);
+	switch (plh)
+	{
+		case 1:
+		hapus_awal();
+		break;
+		case 2:
+		hapus_tertentu();
+		break;
+		case 3:
+		exit(0);
+	}
+}
+void menu_sisip()
+{
+	int plh;
+	puts("1.Sisip Awal \n2.Sisip sebelum \n3.Sisip setelah \n5. kembali ke awal");
+	printf("Masukan Pilihan : ");
+	scanf("%d", &plh);
+	fflush(stdin);
+	switch (plh)
+	{
+		case 1:
+		sisip_awal();
+		break;
+		case 2:
+		sisip_sebelum();
+		break;
+		case 3:
+		sisip_setelah();
+		break;
+		case 4:
+		exit(0);
+	}
+}
+void alokasi()
+{
+	int req;
+	printf("nilai yang ingin dimasukkan : ");
+	scanf("%d", &req);
+	p = (Node *)malloc(sizeof(Node));
+	if (p != NULL)
+	{
+		p->nilai = req;
+		p->next = NULL;
+	}
+	else
+	{
+		printf("Gagal Menambahkan");
+		exit(0);
+	}
+}
+// sisip awal //
+void sisip_awal()
+{
+	alokasi();
+	if (head == NULL)
+	{
+		head = p;
+	}
+	else
+	{
+		p->next = head;
+		head = p;
+	}
+	tampil();
+}
+// sisip setelah //
+void sisip_setelah()
+{
+	Node *after;
+	int key;
+	if (head != NULL)
+	{
+		printf("Disisipkan setelah : ");
+		scanf("%d", &key);
+		alokasi();
+		after = head;
+		while (after->nilai != key)
+		{
+			if (after->next != NULL)
+			{
+				after = after->next;
+			}
+			else
+			{
+				printf("%d Tidak ada dalam List", key);
+			}
+		}
+		p->next = after->next;
+		after->next = p;
+	}
+	else
+	{
+		printf("Insert kosong");
+	}
+	tampil();
+}
+// sisip sebelum //
+void sisip_sebelum()
+{
+	Node *before, *pbefore;
+	int key;
+	alokasi();
+	printf("Disisipkan sebelum : ");
+	scanf("%d", &key);
+	if (head != NULL)
+	{
+		before = head;
+		while (before->nilai != key)
+		{
+			if (before->next != NULL)
+			{
+				pbefore = before;
+				before = before->next;
+			}
+			else
+			{
+				printf("%d Tidak ada dalam List", key);
+			}
+		}
+		p->next = pbefore->next;
+		pbefore->next = p;
+	}
+	else
+	{
+		printf("Insert kosong");
+	}
+	tampil();
+}
+//fungsi hapus//
+void bebas(Node *x)
+{
+	free(x);
+	x = NULL;
+}
+//hapus awal//
+void hapus_awal()
+	{
+	Node *hapus;
+	hapus = head;
+	if (hapus->next == NULL)
+	{
+		head == NULL;
+	}
+	else
+	{
+		head = hapus->next;
+		bebas(hapus);
+	}
+	tampil();
+}
+// hapus tertentu//
+void hapus_tertentu()
+{
+	Node *hapus, *phapus;
+	int key;
+	printf("hapus bagian : ");
+	scanf("%d", &key);
+	hapus = head;
+	if (hapus->nilai == key)
+	{
+		hapus_awal();
+	}
+	else
+	{
+		while (hapus->nilai != key)
+		if (hapus->nilai == NULL)
+		{
+			printf("%d Tidak ada", key);
+			exit(0);
+		}
+		else
+		{
+			phapus = hapus;
+			hapus = hapus->next;
+		}
+		phapus->next = hapus->next;
+		bebas(hapus);
+	}
+	tampil();
+}
+void tampil()
+{
+	Node *simpan;
+	puts("Isinya adalah : ");
+	simpan = head;
+	while (simpan != NULL)
+	{
+		printf("%d\n", simpan->nilai);
+		simpan = simpan->next;
+	}
+	puts(" ");
+}
